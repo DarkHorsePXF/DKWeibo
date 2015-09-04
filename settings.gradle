@@ -1,0 +1,4 @@
+include ':app'
+include ':weiboSDK'
+include ':weiboSDK'
+include ':weiboSDK'

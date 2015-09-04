@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DK微博</string>
+    <string name="oauth_login">网页认证登录</string>
+    <string name="login">登录</string>
+    <string name="login_way">登录方式：</string>
+</resources>

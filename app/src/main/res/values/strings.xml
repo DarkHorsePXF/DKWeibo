@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">MicroBlog</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="oauth_login">OAuth Login</string>
+    <string name="sso_login">SSO Login</string>
+    <string name="login">Login</string>
+    <string name="login_way">Login Ways:</string>
+    <string name="no_login_user">没有已保存用户，请授权！</string>
+    <string name="auth_success">授权成功！</string>
+    <string name="auth_failed">授权失败！</string>
+    <string name="auth_cancel">授权已取消！</string>
+    <string name="auth_exception">授权出错！</string>
+</resources>
