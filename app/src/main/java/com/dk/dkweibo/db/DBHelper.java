@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.dk.dkweibo.support.utils.GlobalContext;
+import com.dk.dkweibo.support.GlobalContext;
 
 /**
  * Created by feng on 2015/8/29.

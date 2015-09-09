@@ -3,6 +3,8 @@ package com.dk.dkweibo.support.utils;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.dk.dkweibo.support.GlobalContext;
+
 /**
  * Created by feng on 2015/7/18.
  */

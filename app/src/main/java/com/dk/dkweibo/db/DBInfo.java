@@ -35,7 +35,7 @@ public final class DBInfo {
                 _ID + " integer primary key autoincrement, " +
                 USER_ID + " text, " +
                 USER_NAME + " text, " +
-                USER_HEAD + " BLOB, " +
+                USER_HEAD + " text, " +
                 TOKEN + " text, " +
                 TOKEN_SECRET + " text, " +
                 DESCRIPTION + " text " +

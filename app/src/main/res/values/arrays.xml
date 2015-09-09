@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="oauth_ways">
+        <item>@string/oauth_login</item>
+        <item>@string/sso_login</item>
+    </array>
+</resources>
