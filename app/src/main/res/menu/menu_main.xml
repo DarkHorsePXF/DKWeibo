@@ -6,13 +6,15 @@
         android:id="@+id/action_publish"
         android:icon="@mipmap/ic_publish"
         android:title="@string/publish"
-        android:showAsAction="always|collapseActionView"
+        android:orderInCategory="90"
+        app:showAsAction="ifRoom"
         ></item>
 
     <item
         android:id="@+id/action_search"
         android:icon="@mipmap/ic_search"
         android:title="@string/search"
-        android:showAsAction="always|collapseActionView"
+        android:orderInCategory="80"
+        app:showAsAction="ifRoom"
         ></item>
 </menu>
