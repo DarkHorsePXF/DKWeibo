@@ -15,6 +15,7 @@ public class URLHelper {
 
     //user
     private static final String URL_USERS = URL_SINA_WEIBO + "users/";
+
     public static final String URL_USER_SHOW = URL_USERS + "show.json";
 
 

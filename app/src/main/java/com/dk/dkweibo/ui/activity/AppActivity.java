@@ -2,11 +2,17 @@ package com.dk.dkweibo.ui.activity;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.internal.view.menu.MenuBuilder;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
+import com.afollestad.materialdialogs.AlertDialogWrapper;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -23,7 +29,10 @@ import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.holder.BadgeStyle;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.auth.WeiboAuthListener;
@@ -47,6 +56,17 @@ public class AppActivity extends BaseActivity {
     private Context mContext;
     private RequestQueue mRequestQueue;
 
+    private final int ID_HOME = 1;
+    private final int ID_DISCOVER = 2;
+    private final int ID_MESSAGE = 3;
+    private final int ID_THEME = 4;
+    private final int ID_SETTING = 5;
+    private final int ID_EXIT = 6;
+
+    private IProfile profileHead;
+
+    private boolean isOauthAgain = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,45 +74,148 @@ public class AppActivity extends BaseActivity {
         init();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return true;
+    }
+
     private void init() {
         mContext = this;
         mRequestQueue = Volley.newRequestQueue(mContext);
 
-
         user = UserKeeper.readUserKeeper(mContext);
-        LogUtil.v("user", user.toString());
+        LogUtil.v("user_head_url", user.getUserHeadUrl());
 
         //try to update token
-//        if (AuthHelper.isNecessaryUpdate(mContext)) {
+        if (AuthHelper.isNecessaryUpdate(mContext)) {
             requestOauth();
-//        }
+        }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.action_publish:
+                        ToastUtil.shortToast("发表微博");
+                        break;
+                    case R.id.action_search:
+                        ToastUtil.shortToast("搜索");
+                        break;
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
 
-        final IProfile profile = new ProfileDrawerItem()
+
+        profileHead = new ProfileDrawerItem()
                 .withName(user.getUserName())
-                .withEmail(user.getDescription())
-                .withIcon(user.getUserHeadUrl());
+                .withIcon(user.getUserHeadUrl())
+                .withEmail(user.getDescription());
+
 
         headerResult = new AccountHeaderBuilder()
                 .withHeaderBackground(R.mipmap.bg_home)
                 .withActivity(this)
-                .addProfiles(profile)
+                .addProfiles(profileHead)
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile iProfile, boolean b) {
+                        requestOauth();
+                        return false;
+                    }
+                })
                 .build();
+
+        headerResult.setActiveProfile(profileHead);
 
         drawer = new DrawerBuilder()
                 .withActivity(this)
+                .withToolbar(toolbar)
                 .withAccountHeader(headerResult)
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withIcon(R.mipmap.ic_home).withName(R.string.home_page).withIdentifier(ID_HOME).withSelectable(false),
+                        new PrimaryDrawerItem().withIcon(R.mipmap.ic_discover).withName(R.string.discover).withIdentifier(ID_DISCOVER).withSelectable(false),
+                        new PrimaryDrawerItem().withIcon(R.mipmap.ic_message).withName(R.string.message).withIdentifier(ID_MESSAGE).withSelectable(false).
+                                withBadgeStyle(new BadgeStyle().withTextColor(Color.WHITE).withColorRes(R.color.md_red_700)),
+                        new PrimaryDrawerItem().withIcon(R.mipmap.ic_theme).withName(R.string.switch_theme).withIdentifier(ID_THEME).withSelectable(false),
+                        new PrimaryDrawerItem().withIcon(R.mipmap.ic_setting).withName(R.string.setting).withIdentifier(ID_SETTING).withSelectable(false),
+                        new PrimaryDrawerItem().withIcon(R.mipmap.ic_exit).withName(R.string.exit).withIdentifier(ID_EXIT).withSelectable(false)
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem iDrawerItem) {
+                        if (iDrawerItem != null) {
+                            int id = iDrawerItem.getIdentifier();
+                            switch (id) {
+                                case ID_HOME:
+                                    ToastUtil.shortToast("主页");
+                                    break;
+                                case ID_DISCOVER:
+                                    ToastUtil.shortToast("发现");
+                                    break;
+                                case ID_MESSAGE:
+                                    ToastUtil.shortToast("消息");
+                                    break;
+                                case ID_THEME:
+                                    ToastUtil.shortToast("主题");
+                                    break;
+                                case ID_SETTING:
+                                    ToastUtil.shortToast("设置");
+                                    break;
+                                case ID_EXIT:
+                                    tryToExit();
+                                    break;
+                            }
+                        }
+                        return false;
+                    }
+                })
+                .withShowDrawerOnFirstLaunch(true)
                 .build();
 
+
+    }
+
+    private void tryToExit() {
+        new AlertDialogWrapper.Builder(mContext)
+                .setTitle("是否确认退出？")
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        if (isOauthAgain) {
+            isOauthAgain = false;
+            this.recreate();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-
     }
 
     private void requestOauth() {
@@ -131,6 +254,7 @@ public class AppActivity extends BaseActivity {
         public void onComplete(Bundle values) {
             // 从 Bundle 中解析 Token
             mAccessToken = Oauth2AccessToken.parseAccessToken(values);
+            isOauthAgain = true;
             if (mAccessToken.isSessionValid()) {
                 // 显示 Token
                 updateAccount();
@@ -164,30 +288,34 @@ public class AppActivity extends BaseActivity {
         }
     };
 
+
     private void updateAccount() {
         String date = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(
                 new java.util.Date(mAccessToken.getExpiresTime() + 3600 * 24 * 1));
         ToastUtil.shortToast("账户有效期至：" + date);
         UserAPI userAPI = new UserAPI(mContext);
-        userAPI.show(mRequestQueue, new Response.Listener<JSONObject>() {
+        userAPI.doGetShow(mRequestQueue, new Response.Listener<JSONObject>() {
+
             @Override
             public void onResponse(JSONObject response) {
                 LogUtil.v("response", response.toString());
                 user.setUserId(response.optString("id"));
                 user.setUserName(response.optString("screen_name"));
                 user.setDescription(response.optString("description"));
-                user.setUserHeadUrl(response.optString("profile_image_url"));
+                user.setUserHeadUrl(response.optString("avatar_large"));
 
-                UserKeeper.writeUserKeeper(AppActivity.this,user);
+                UserKeeper.writeUserKeeper(AppActivity.this, user);
 
-                final IProfile profile = new ProfileDrawerItem()
-                        .withName(user.getUserName())
-                        .withEmail(user.getDescription())
-                        .withIcon(user.getUserHeadUrl());
-                headerResult.updateProfile(profile);
+                profileHead.withIcon(user.getUserHeadUrl());
+                profileHead.withName(user.getUserName());
+                profileHead.withEmail(user.getDescription());
+
             }
         });
     }
 
-
+    @Override
+    public void onBackPressed() {
+        tryToExit();
+    }
 }

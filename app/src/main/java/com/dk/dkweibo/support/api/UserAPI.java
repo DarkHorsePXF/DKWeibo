@@ -29,7 +29,7 @@ public class UserAPI extends AbsAPI {
         super(context);
     }
 
-    public void show(RequestQueue requestQueue, Response.Listener<JSONObject> listener) {
+    public void doGetShow(RequestQueue requestQueue, Response.Listener<JSONObject> listener) {
 
         Map<String, String> params = new HashMap<>();
         params.put(Constant.PARAMS_UID, ACCESS_TOKEN.getUid());
