@@ -1,4 +1,4 @@
-package com.dk.dkweibo.support.sharepreference;
+package com.dk.dkweibo.support.preference;
 
 import android.content.Context;
 import android.content.SharedPreferences;

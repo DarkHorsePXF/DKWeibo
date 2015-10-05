@@ -1,11 +1,12 @@
 package com.dk.dkweibo.ui.activity;
 
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.internal.view.menu.MenuBuilder;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -20,11 +21,12 @@ import com.android.volley.toolbox.Volley;
 import com.dk.dkweibo.R;
 import com.dk.dkweibo.bean.User;
 import com.dk.dkweibo.support.api.UserAPI;
-import com.dk.dkweibo.support.sharepreference.AccessTokenKeeper;
-import com.dk.dkweibo.support.sharepreference.UserKeeper;
+import com.dk.dkweibo.support.preference.AccessTokenKeeper;
+import com.dk.dkweibo.support.preference.UserKeeper;
 import com.dk.dkweibo.support.sina.AuthHelper;
 import com.dk.dkweibo.support.utils.LogUtil;
 import com.dk.dkweibo.support.utils.ToastUtil;
+import com.dk.dkweibo.ui.fragment.FollowersTimelineFragment;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -178,6 +180,11 @@ public class AppActivity extends BaseActivity {
                 .withShowDrawerOnFirstLaunch(true)
                 .build();
 
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        FollowersTimelineFragment fragment = new FollowersTimelineFragment();
+        transaction.replace(R.id.fl_timeline_content,fragment);
+        transaction.commit();
 
     }
 

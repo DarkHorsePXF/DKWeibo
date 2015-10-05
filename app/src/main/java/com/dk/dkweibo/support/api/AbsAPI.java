@@ -2,7 +2,7 @@ package com.dk.dkweibo.support.api;
 
 import android.content.Context;
 
-import com.dk.dkweibo.support.sharepreference.AccessTokenKeeper;
+import com.dk.dkweibo.support.preference.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 
 /**

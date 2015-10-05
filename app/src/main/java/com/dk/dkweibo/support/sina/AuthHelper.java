@@ -3,7 +3,7 @@ package com.dk.dkweibo.support.sina;
 import android.app.Activity;
 import android.content.Context;
 
-import com.dk.dkweibo.support.sharepreference.AccessTokenKeeper;
+import com.dk.dkweibo.support.preference.AccessTokenKeeper;
 import com.dk.dkweibo.support.utils.LogUtil;
 import com.sina.weibo.sdk.auth.AuthInfo;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
