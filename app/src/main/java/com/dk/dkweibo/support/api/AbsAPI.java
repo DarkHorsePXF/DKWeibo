@@ -9,11 +9,13 @@ import com.sina.weibo.sdk.auth.Oauth2AccessToken;
  * Created by feng on 2015/9/7.
  */
 public abstract class AbsAPI {
-    protected Context mContext;
-    protected Oauth2AccessToken ACCESS_TOKEN;
+    private Oauth2AccessToken accessToken;
 
     public AbsAPI(Context context){
-        this.mContext = context;
-        ACCESS_TOKEN = AccessTokenKeeper.readAccessToken(mContext);
+        this.accessToken = AccessTokenKeeper.readAccessToken(context);
+    }
+
+    public Oauth2AccessToken getAccessToken() {
+        return accessToken;
     }
 }

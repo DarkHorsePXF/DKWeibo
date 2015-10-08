@@ -1,5 +1,6 @@
 package com.dk.dkweibo.support;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -14,9 +15,10 @@ public class URLHelper {
     private static final String AND = "&";
 
     //user
-    private static final String URL_USERS = URL_SINA_WEIBO + "users/";
+    public static final String URL_USER_SHOW = URL_SINA_WEIBO+"users/show.json";
 
-    public static final String URL_USER_SHOW = URL_USERS + "show.json";
+    //statuses
+    public static final String URL_STATUSES_HOME_TIMELINE = URL_SINA_WEIBO+"statuses/home_timeline.json";
 
 
     /**
@@ -43,5 +45,7 @@ public class URLHelper {
         }
         return sb.toString();
     }
+
+
 
 }

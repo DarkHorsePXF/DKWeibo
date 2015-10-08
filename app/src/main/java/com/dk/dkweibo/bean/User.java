@@ -1,6 +1,6 @@
 package com.dk.dkweibo.bean;
 
-import android.graphics.drawable.Drawable;
+import org.json.JSONObject;
 
 /**
  * Created by feng on 2015/8/28.
@@ -8,10 +8,25 @@ import android.graphics.drawable.Drawable;
 public class User {
     private String userId;
     private String userName = "username";
-    private String userHeadUrl;
+    private String largeUserHeadUrl;
+    private String profileUserHeadUrl;
+    private String backgroundPicUrl;
     private String token;
     private String tokenSecret;
     private String description;
+
+    public static User getUserFromJson(JSONObject json){
+        if (json==null||json.length()==0)
+            return null;
+        User user=new User();
+        user.setUserId(json.optString("id"));
+        user.setUserName(json.optString("screen_name"));
+        user.setDescription(json.optString("description"));
+        user.setLargeUserHeadUrl(json.optString("avatar_large"));
+        user.setProfileUserHeadUrl(json.optString("profile_image_url"));
+        user.setBackgroundPicUrl(json.optString("cover_image_phone"));
+        return user;
+    }
 
 
     public String getUserName() {
@@ -55,12 +70,12 @@ public class User {
         this.description = description;
     }
 
-    public String getUserHeadUrl() {
-        return userHeadUrl;
+    public String getLargeUserHeadUrl() {
+        return largeUserHeadUrl;
     }
 
-    public void setUserHeadUrl(String userHeadUrl) {
-        this.userHeadUrl = userHeadUrl;
+    public void setLargeUserHeadUrl(String largeUserHeadUrl) {
+        this.largeUserHeadUrl = largeUserHeadUrl;
     }
 
     @Override
@@ -68,6 +83,22 @@ public class User {
         return " user_id:" + userId
                 + " username:" + userName
                 + " description:" + description
-                + " head_url:" + userHeadUrl;
+                + " head_url:" + largeUserHeadUrl;
+    }
+
+    public String getProfileUserHeadUrl() {
+        return profileUserHeadUrl;
+    }
+
+    public void setProfileUserHeadUrl(String profileUserHeadUrl) {
+        this.profileUserHeadUrl = profileUserHeadUrl;
+    }
+
+    public String getBackgroundPicUrl() {
+        return backgroundPicUrl;
+    }
+
+    public void setBackgroundPicUrl(String backgroundPicUrl) {
+        this.backgroundPicUrl = backgroundPicUrl;
     }
 }

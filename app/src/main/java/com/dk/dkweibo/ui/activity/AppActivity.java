@@ -26,7 +26,7 @@ import com.dk.dkweibo.support.preference.UserKeeper;
 import com.dk.dkweibo.support.sina.AuthHelper;
 import com.dk.dkweibo.support.utils.LogUtil;
 import com.dk.dkweibo.support.utils.ToastUtil;
-import com.dk.dkweibo.ui.fragment.FollowersTimelineFragment;
+import com.dk.dkweibo.ui.fragment.HomeTimelineFragment;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -87,7 +87,7 @@ public class AppActivity extends BaseActivity {
         mRequestQueue = Volley.newRequestQueue(mContext);
 
         user = UserKeeper.readUserKeeper(mContext);
-        LogUtil.v("user_head_url", user.getUserHeadUrl());
+        LogUtil.v("user_head_url", user.getLargeUserHeadUrl());
 
         //try to update token
         if (AuthHelper.isNecessaryUpdate(mContext)) {
@@ -116,7 +116,7 @@ public class AppActivity extends BaseActivity {
 
         profileHead = new ProfileDrawerItem()
                 .withName(user.getUserName())
-                .withIcon(user.getUserHeadUrl())
+                .withIcon(user.getLargeUserHeadUrl())
                 .withEmail(user.getDescription());
 
 
@@ -182,7 +182,7 @@ public class AppActivity extends BaseActivity {
 
         FragmentManager fm = getFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
-        FollowersTimelineFragment fragment = new FollowersTimelineFragment();
+        HomeTimelineFragment fragment = new HomeTimelineFragment();
         transaction.replace(R.id.fl_timeline_content,fragment);
         transaction.commit();
 
@@ -306,16 +306,8 @@ public class AppActivity extends BaseActivity {
             @Override
             public void onResponse(JSONObject response) {
                 LogUtil.v("response", response.toString());
-                user.setUserId(response.optString("id"));
-                user.setUserName(response.optString("screen_name"));
-                user.setDescription(response.optString("description"));
-                user.setUserHeadUrl(response.optString("avatar_large"));
-
+                user=User.getUserFromJson(response);
                 UserKeeper.writeUserKeeper(AppActivity.this, user);
-
-                profileHead.withIcon(user.getUserHeadUrl());
-                profileHead.withName(user.getUserName());
-                profileHead.withEmail(user.getDescription());
 
             }
         });

@@ -29,7 +29,7 @@ public class UserKeeper {
 
         SharedPreferences.Editor editor = pref.edit();
         editor.putString(KEY_USER_NAME, user.getUserName());
-        editor.putString(KEY_USER_HEAD_URL, user.getUserHeadUrl());
+        editor.putString(KEY_USER_HEAD_URL, user.getLargeUserHeadUrl());
         editor.putString(KEY_DESCRIPTION, user.getDescription());
         editor.commit();
     }
@@ -42,7 +42,7 @@ public class UserKeeper {
 
         User user =new User();
         user.setUserName(pref.getString(KEY_USER_NAME,""));
-        user.setUserHeadUrl(pref.getString(KEY_USER_HEAD_URL,""));
+        user.setLargeUserHeadUrl(pref.getString(KEY_USER_HEAD_URL, ""));
         user.setDescription(pref.getString(KEY_DESCRIPTION,""));
 
         return user;

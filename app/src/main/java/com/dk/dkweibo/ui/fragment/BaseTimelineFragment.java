@@ -29,10 +29,8 @@ public class BaseTimelineFragment extends Fragment{
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case MSG_REFRESH_COMPLETE:{
-                    if (msg.obj instanceof PtrFrameLayout){
-                        ((PtrFrameLayout) msg.obj).refreshComplete();
-                        ToastUtil.shortToast("刷新完成");
-                    }
+                    refreshComplete();
+                    ToastUtil.shortToast("刷新完成");
                     break;
                 }
                 default:
@@ -73,16 +71,13 @@ public class BaseTimelineFragment extends Fragment{
 
             @Override
             public void onRefreshBegin(final PtrFrameLayout frame) {
-                ToastUtil.shortToast("开始刷新!");
+                ToastUtil.shortToast("开始刷新！");
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         try {
                             Thread.sleep(2000);
-                            Message msg =new Message();
-                            msg.obj=frame;
-                            msg.what=MSG_REFRESH_COMPLETE;
-                            handler.sendMessage(msg);
+                            handler.sendEmptyMessage(MSG_REFRESH_COMPLETE);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -94,9 +89,18 @@ public class BaseTimelineFragment extends Fragment{
         return view;
     }
 
+    protected void refreshComplete(){
+        if (ptrFrameLayout!=null){
+            ptrFrameLayout.refreshComplete();
+        }
+    }
+
 
     public void setPtrHandler(PtrHandler ptrHandler){
-        ptrFrameLayout.setPtrHandler(ptrHandler);
+        if (ptrHandler!=null){
+            ptrFrameLayout.setPtrHandler(ptrHandler);
+        }
+
     }
 
     @Override
@@ -118,4 +122,5 @@ public class BaseTimelineFragment extends Fragment{
     public void onDestroy() {
         super.onDestroy();
     }
+
 }

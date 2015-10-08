@@ -60,4 +60,8 @@ public class GlobalContext extends Application {
     public static GlobalContext getInstance() {
         return globalContext;
     }
+
+    public RequestQueue getRequeseQueue(){
+        return mRequestQueue;
+    }
 }
