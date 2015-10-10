@@ -15,19 +15,19 @@
             cube_ptr:ptr_keep_header_when_refresh="true"
             cube_ptr:ptr_pull_to_fresh="true"
             cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
-
             cube_ptr:ptr_resistance="1.7">
 
         <RelativeLayout
                 android:layout_height="match_parent"
                 android:layout_width="match_parent">
-            <android.support.v7.widget.RecyclerView
+            <com.dk.dkweibo.ui.widget.TimelineListView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:id="@+id/rv_timeline"
 
                     >
 
-            </android.support.v7.widget.RecyclerView>
+            </com.dk.dkweibo.ui.widget.TimelineListView>
         </RelativeLayout>
 
     </in.srain.cube.views.ptr.PtrFrameLayout>

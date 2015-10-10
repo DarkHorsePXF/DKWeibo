@@ -8,6 +8,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.dk.dkweibo.support.Constant;
 import com.dk.dkweibo.support.URLHelper;
+import com.dk.dkweibo.support.utils.LogUtil;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -25,8 +26,6 @@ public class StatusesAPI extends AbsAPI {
         Map<String, String> params = new HashMap<>();
         params.put(Constant.PARAMS_ACCESS_TOKEN, getAccessToken().getToken());
 
-        Log.v("params", params.toString());
-
         final JsonObjectRequest request =
                 new JsonObjectRequest(
                         Request.Method.GET,
@@ -35,6 +34,7 @@ public class StatusesAPI extends AbsAPI {
                         listener,
                         errorListener
                 );
+        LogUtil.v("request",request.getUrl());
         requestQueue.add(request);
     }
 }

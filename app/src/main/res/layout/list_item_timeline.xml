@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:fresco="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="10dp"
@@ -10,13 +11,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
-        <ImageView
+        <com.dk.dkweibo.ui.widget.AvatarView
+
                 android:layout_width="@dimen/iv_list_timeline_user_head"
                 android:layout_height="@dimen/iv_list_timeline_user_head"
                 android:layout_alignParentLeft="true"
+                fresco:placeholderImage="@drawable/ic_default_head"
                 android:id="@+id/iv_user_head"
                 android:layout_marginRight="10dp"
-                android:src="@drawable/ic_default_head"/>
+                />
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/iv_list_timeline_user_head"
@@ -49,10 +52,11 @@
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
-    <TextView
+    <com.dk.dkweibo.ui.widget.StatusTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:id="@+id/tv_status_text"
             android:textSize="@dimen/timeline_content_txt"
             android:text="求关注。。。。。。"/>
     <LinearLayout
@@ -64,7 +68,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:id="@+id/ll_relay"
+                android:id="@+id/ll_retweet"
                 android:clickable="true"
                 android:layout_height="wrap_content">
             <ImageView
@@ -77,7 +81,7 @@
                     android:layout_height="match_parent"
                     android:baselineAlignBottom="true"
                     android:layout_marginLeft="5dp"
-                    android:id="@+id/tv_relay"
+                    android:id="@+id/tv_retweet"
                     android:textSize="@dimen/timeline_comment_txt"
                     android:text="@string/re_tweet"/>
         </LinearLayout>
