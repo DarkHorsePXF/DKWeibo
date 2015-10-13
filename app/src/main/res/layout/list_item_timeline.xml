@@ -29,6 +29,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="2"
+                    android:textColor="@color/material_grey_850"
                     android:text="潘先锋"
                     android:id="@+id/tv_user_name"
                     />
@@ -57,8 +58,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:id="@+id/tv_status_text"
+            android:textColor="@color/material_grey_900"
             android:textSize="@dimen/timeline_content_txt"
             android:text="求关注。。。。。。"/>
+
+    <include layout="@layout/layout_retweet_status"/>
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

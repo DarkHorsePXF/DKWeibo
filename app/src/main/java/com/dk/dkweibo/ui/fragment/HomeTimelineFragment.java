@@ -110,5 +110,6 @@ public class HomeTimelineFragment extends BaseTimelineFragment{
         timelineAdapter =new TimelineAdapter(mContext,statusList);
         lvTimeline.setAdapter(timelineAdapter);
 
+
     }
 }

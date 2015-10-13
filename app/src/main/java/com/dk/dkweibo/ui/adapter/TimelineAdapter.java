@@ -7,12 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.dk.dkweibo.R;
 import com.dk.dkweibo.bean.Status;
 import com.dk.dkweibo.support.utils.LogUtil;
 import com.dk.dkweibo.support.utils.ToastUtil;
 import com.dk.dkweibo.ui.widget.AvatarView;
+import com.dk.dkweibo.ui.widget.RetweetStatusTextView;
 import com.dk.dkweibo.ui.widget.StatusTextView;
 
 import java.util.List;
@@ -52,6 +54,15 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             if (status.getAgree_count()!=0)
                 statusHolder.tvAgree.setText(status.getAgree_count()+"");
             statusHolder.tvUsername.setText(status.getUser().getUserName());
+            if (status.getRetweeted_status()!=null){
+                statusHolder.rlRetweetStatus.setVisibility(View.VISIBLE);
+                statusHolder.tvRetweetStatus.setRetweetUsernameAndText(
+                        status.getRetweeted_status().getUser().getUserName(),
+                        status.getRetweeted_status().getText()
+                );
+            }else {
+                statusHolder.rlRetweetStatus.setVisibility(View.GONE);
+            }
 
         }
     }
@@ -74,7 +85,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView tvUsername;
         TextView tvPublishTime;
         TextView tvFromDevice;
-
+        RelativeLayout rlRetweetStatus;
+        RetweetStatusTextView tvRetweetStatus;
 
         public StatusHolder(View itemView) {
             super(itemView);
@@ -90,6 +102,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             tvAgree= (TextView) itemView.findViewById(R.id.tv_agree);
             tvCommend= (TextView) itemView.findViewById(R.id.tv_comment);
             tvRetweet= (TextView) itemView.findViewById(R.id.tv_retweet);
+            tvRetweetStatus=(RetweetStatusTextView) itemView.findViewById(R.id.tv_retweet_text);
+            rlRetweetStatus= (RelativeLayout) itemView.findViewById(R.id.rl_retweet_status);
 
             View.OnClickListener listener=new View.OnClickListener() {
 
@@ -112,6 +126,9 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         case R.id.ll_comment:
                             ToastUtil.shortToast("评论:"+status.getUser().getUserName());
                             break;
+                        case R.id.rl_retweet_status:
+                            ToastUtil.shortToast(status.getRetweeted_status().getUser()+"被转发的微博");
+                            break;
 
                     }
                 }
@@ -122,6 +139,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             llCommend.setOnClickListener(listener);
             llRetweet.setOnClickListener(listener);
             llAgree.setOnClickListener(listener);
+            rlRetweetStatus.setOnClickListener(listener);
+            tvRetweetStatus.setOnClickListener(listener);
 
         }
     }
