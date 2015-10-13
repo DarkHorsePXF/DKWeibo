@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import com.dk.dkweibo.support.utils.LogUtil;
+import com.dk.dkweibo.ui.listener.OnLoadMoreListener;
 
 /**
  * Created by feng on 2015/10/10.
@@ -14,6 +15,7 @@ public class TimelineListView extends RecyclerView {
     private Context mContext;
     private boolean isShowTop = true;
     private boolean isShowBottom = false;
+    private OnLoadMoreListener mOnLoadMoreListener;
 
 
     public TimelineListView(Context context) {
@@ -45,6 +47,9 @@ public class TimelineListView extends RecyclerView {
         if (lastPosition == this.getChildCount()-1) {
             if (!isShowBottom) {
                 isShowBottom=true;
+                if (mOnLoadMoreListener!=null){
+                    mOnLoadMoreListener.onLoadMore();
+                }
             }
         } else {
             isShowBottom = false;
@@ -73,6 +78,10 @@ public class TimelineListView extends RecyclerView {
         if (!(layout instanceof LinearLayoutManager))
             throw new IllegalStateException("You should input LinearLayoutManager!");
         super.setLayoutManager(layout);
+    }
+
+    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener){
+        this.mOnLoadMoreListener=onLoadMoreListener;
     }
 
     public final boolean isRefreshable() {

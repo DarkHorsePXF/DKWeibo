@@ -17,6 +17,7 @@ import com.dk.dkweibo.support.api.StatusesAPI;
 import com.dk.dkweibo.support.utils.LogUtil;
 import com.dk.dkweibo.support.utils.ToastUtil;
 import com.dk.dkweibo.ui.adapter.TimelineAdapter;
+import com.dk.dkweibo.ui.listener.OnLoadMoreListener;
 import com.dk.dkweibo.ui.widget.TimelineListView;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -38,6 +39,7 @@ public class HomeTimelineFragment extends BaseTimelineFragment{
     private TimelineListView lvTimeline;
     private List<Status> statusList;
     private Context mContext;
+    private int timelinePage=1;
 
 
     @Nullable
@@ -66,40 +68,8 @@ public class HomeTimelineFragment extends BaseTimelineFragment{
 
             @Override
             public void onRefreshBegin(PtrFrameLayout ptrFrameLayout) {
-                StatusesAPI statusesAPI=new StatusesAPI(getActivity());
-                statusesAPI.doGetHomeTimeline(
-                        GlobalContext.getInstance().getRequeseQueue(),
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                try {
-                                    statusList.clear();
-                                    JSONArray jsonArray=response.getJSONArray("statuses");
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject json=jsonArray.getJSONObject(i);
-                                        Status status=Status.getStatusFromJson(json);
-                                        statusList.add(status);
-                                        LogUtil.v("status",status.toString());
-                                    }
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                    ToastUtil.shortToast(GlobalContext.getInstance().getApplicationContext().getString(R.string.network_request_error));
-                                }finally {
-                                    timelineAdapter.notifyDataSetChanged();
-                                    HomeTimelineFragment.super.refreshComplete();
-                                }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                error.printStackTrace();
-                                HomeTimelineFragment.super.refreshComplete();
-                                ToastUtil.shortToast(GlobalContext.getInstance().getApplicationContext().getString(R.string.network_request_error));
-                            }
-                        }
-                );
+                timelinePage=1;
+                requestTimeline();
             }
         });
 
@@ -109,7 +79,55 @@ public class HomeTimelineFragment extends BaseTimelineFragment{
 //        lvTimeline.setLayoutManager(layoutManager);
         timelineAdapter =new TimelineAdapter(mContext,statusList);
         lvTimeline.setAdapter(timelineAdapter);
+        lvTimeline.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                timelinePage++;
+                requestTimeline();
+            }
+        });
 
+    }
 
+    private void requestTimeline() {
+        StatusesAPI statusesAPI=new StatusesAPI(getActivity());
+        statusesAPI.doGetHomeTimeline(
+                GlobalContext.getInstance().getRequeseQueue(),
+                timelinePage,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            if (timelinePage==1){
+                                statusList.clear();
+                            }
+                            JSONArray jsonArray=response.getJSONArray("statuses");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject json=jsonArray.getJSONObject(i);
+                                Status status=Status.getStatusFromJson(json);
+                                statusList.add(status);
+                                LogUtil.v("status",status.toString());
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            ToastUtil.shortToast(GlobalContext.getInstance().getApplicationContext().getString(R.string.network_request_error));
+                        }finally {
+                            timelineAdapter.notifyDataSetChanged();
+                            if (timelinePage==1){
+                                HomeTimelineFragment.super.refreshComplete();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        error.printStackTrace();
+                        HomeTimelineFragment.super.refreshComplete();
+                        ToastUtil.shortToast(GlobalContext.getInstance().getApplicationContext().getString(R.string.network_request_error));
+                    }
+                }
+        );
     }
 }

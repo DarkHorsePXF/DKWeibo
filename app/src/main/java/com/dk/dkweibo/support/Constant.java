@@ -10,6 +10,8 @@ public final class Constant {
     public static final String PARAMS_UID = "uid";
     public static final String PARAMS_ACCESS_TOKEN = "access_token";
     public static final String PARAMS_SCREEN_NAME = "screen_name";
+    public static final String PARAMS_PAGE = "page";
+
 
 
 

@@ -20,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.dk.dkweibo.R;
 import com.dk.dkweibo.bean.User;
+import com.dk.dkweibo.support.GlobalContext;
 import com.dk.dkweibo.support.api.UserAPI;
 import com.dk.dkweibo.support.preference.AccessTokenKeeper;
 import com.dk.dkweibo.support.preference.UserKeeper;
@@ -50,6 +51,7 @@ import java.util.ArrayList;
  */
 public class AppActivity extends BaseActivity {
 
+    private final String TAG="AppActivity";
     private AccountHeader headerResult = null;
     private Drawer drawer = null;
     private Toolbar toolbar = null;
@@ -311,6 +313,12 @@ public class AppActivity extends BaseActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        GlobalContext.getInstance().getRequeseQueue().cancelAll(TAG);
     }
 
     @Override

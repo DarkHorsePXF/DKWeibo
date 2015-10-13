@@ -31,7 +31,7 @@ public class UserAPI extends AbsAPI {
 
     public void doGetShow(RequestQueue requestQueue, Response.Listener<JSONObject> listener) {
 
-        Map<String, String> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         params.put(Constant.PARAMS_UID, getAccessToken().getUid());
         params.put(Constant.PARAMS_SOURCE, AuthHelper.APP_KEY);
         params.put(Constant.PARAMS_ACCESS_TOKEN, getAccessToken().getToken());

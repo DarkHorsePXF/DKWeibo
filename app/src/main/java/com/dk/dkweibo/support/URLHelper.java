@@ -26,7 +26,7 @@ public class URLHelper {
      * @param params ?号后面的键值对
      * @return GET请求的URL
      */
-    public static String addGETParams(Map<String,String> params){
+    public static String addGETParams(Map<String,Object> params){
         if (params.isEmpty()){
             return "";
         }
@@ -37,7 +37,7 @@ public class URLHelper {
         while (it.hasNext()){
             Map.Entry entry = (Map.Entry) it.next();
             String key = (String) entry.getKey();
-            String value = (String) entry.getValue();
+            Object value = entry.getValue();
             sb.append(key+"="+value);
             if (it.hasNext()){
                 sb.append(AND);

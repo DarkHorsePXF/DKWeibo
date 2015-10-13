@@ -22,9 +22,10 @@ public class StatusesAPI extends AbsAPI {
         super(context);
     }
 
-    public void doGetHomeTimeline(RequestQueue requestQueue,Response.Listener<JSONObject> listener,Response.ErrorListener errorListener){
-        Map<String, String> params = new HashMap<>();
+    public void doGetHomeTimeline(RequestQueue requestQueue,int page,Response.Listener<JSONObject> listener,Response.ErrorListener errorListener){
+        Map<String, Object> params = new HashMap<>();
         params.put(Constant.PARAMS_ACCESS_TOKEN, getAccessToken().getToken());
+        params.put(Constant.PARAMS_PAGE,page);
 
         final JsonObjectRequest request =
                 new JsonObjectRequest(
@@ -37,4 +38,5 @@ public class StatusesAPI extends AbsAPI {
         LogUtil.v("request",request.getUrl());
         requestQueue.add(request);
     }
+
 }
