@@ -6,6 +6,7 @@
         android:id="@+id/rl_retweet_status"
         android:layout_margin="10dp"
         android:clickable="true"
+        android:background="#ffc9e8e8"
         >
     <com.dk.dkweibo.ui.widget.RetweetStatusTextView
             android:layout_width="match_parent"
@@ -13,8 +14,15 @@
             android:textColor="@color/md_blue_grey_700"
             android:id="@+id/tv_retweet_text"
             android:text="\@被转发者 :求关注。。。"
-            android:background="#ffc9e8e8"
             android:textSize="@dimen/timeline_content_txt"
             android:visibility="visible"
             />
+
+    <com.dk.dkweibo.ui.widget.TimelinePicView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_retweet_text"
+            android:id="@+id/retweet_status_pic_view"
+            >
+    </com.dk.dkweibo.ui.widget.TimelinePicView>
 </RelativeLayout>

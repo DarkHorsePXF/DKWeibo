@@ -24,6 +24,7 @@
     <string name="publish">发表</string>
     <string name="search">搜索</string>
     <string name="network_request_error">网络请求错误！</string>
+    <string name="network_parse_error">网络解析错误！</string>
     <string name="re_tweet">转发</string>
     <string name="comment">评论</string>
     <string name="agree">赞</string>

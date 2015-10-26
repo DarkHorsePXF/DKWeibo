@@ -61,7 +61,7 @@ public class GlobalContext extends Application {
         return globalContext;
     }
 
-    public RequestQueue getRequeseQueue(){
+    public RequestQueue getRequestQueue(){
         return mRequestQueue;
     }
 }

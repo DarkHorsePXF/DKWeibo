@@ -4,7 +4,6 @@ package com.dk.dkweibo.ui.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +16,7 @@ import com.dk.dkweibo.support.api.StatusesAPI;
 import com.dk.dkweibo.support.utils.LogUtil;
 import com.dk.dkweibo.support.utils.ToastUtil;
 import com.dk.dkweibo.ui.adapter.TimelineAdapter;
-import com.dk.dkweibo.ui.listener.OnLoadMoreListener;
 import com.dk.dkweibo.ui.widget.TimelineListView;
-import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import org.json.JSONArray;
@@ -32,20 +29,19 @@ import java.util.List;
 /**
  * Created by feng on 2015/10/5.
  */
-public class HomeTimelineFragment extends BaseTimelineFragment{
+public class HomeTimelineFragment extends BaseTimelineFragment {
 
     private TimelineAdapter timelineAdapter;
-    private LinearLayoutManager layoutManager;
     private TimelineListView lvTimeline;
     private List<Status> statusList;
     private Context mContext;
-    private int timelinePage=1;
+    private int timelinePage = 1;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        mContext=container.getContext();
+        mContext = container.getContext();
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -57,7 +53,7 @@ public class HomeTimelineFragment extends BaseTimelineFragment{
     }
 
     private void init() {
-        statusList=new ArrayList<>();
+        statusList = new ArrayList<>();
 
         //初始化下拉刷新时的动作
         super.setPtrHandler(new PtrHandler() {
@@ -68,53 +64,52 @@ public class HomeTimelineFragment extends BaseTimelineFragment{
 
             @Override
             public void onRefreshBegin(PtrFrameLayout ptrFrameLayout) {
-                timelinePage=1;
+                timelinePage = 1;
                 requestTimeline();
             }
         });
 
         //初始化RecyclerView
         lvTimeline = (TimelineListView) getView().findViewById(R.id.rv_timeline);
-//        layoutManager=new LinearLayoutManager(mContext);
-//        lvTimeline.setLayoutManager(layoutManager);
-        timelineAdapter =new TimelineAdapter(mContext,statusList);
+        timelineAdapter = new TimelineAdapter(mContext, statusList);
         lvTimeline.setAdapter(timelineAdapter);
-        lvTimeline.setOnLoadMoreListener(new OnLoadMoreListener() {
+        lvTimeline.setOnLoadMoreListener(new TimelineListView.OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
                 timelinePage++;
-                requestTimeline();
+                //FIXME
+//                requestTimeline();
             }
         });
 
     }
 
     private void requestTimeline() {
-        StatusesAPI statusesAPI=new StatusesAPI(getActivity());
+        StatusesAPI statusesAPI = new StatusesAPI(getActivity());
         statusesAPI.doGetHomeTimeline(
-                GlobalContext.getInstance().getRequeseQueue(),
+                GlobalContext.getInstance().getRequestQueue(),
                 timelinePage,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            if (timelinePage==1){
+                            if (isRefresh()) {
                                 statusList.clear();
                             }
-                            JSONArray jsonArray=response.getJSONArray("statuses");
+                            JSONArray jsonArray = response.getJSONArray("statuses");
                             for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject json=jsonArray.getJSONObject(i);
-                                Status status=Status.getStatusFromJson(json);
+                                JSONObject json = jsonArray.getJSONObject(i);
+                                Status status = Status.getStatusFromJson(json);
                                 statusList.add(status);
-                                LogUtil.v("status",status.toString());
+                                LogUtil.v("status", status.toString());
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            ToastUtil.shortToast(GlobalContext.getInstance().getApplicationContext().getString(R.string.network_request_error));
-                        }finally {
+                            ToastUtil.shortToast(GlobalContext.getInstance().getApplicationContext().getString(R.string.network_parse_error));
+                        } finally {
                             timelineAdapter.notifyDataSetChanged();
-                            if (timelinePage==1){
+                            if (isRefresh()) {
                                 HomeTimelineFragment.super.refreshComplete();
                             }
                         }
@@ -129,5 +124,13 @@ public class HomeTimelineFragment extends BaseTimelineFragment{
                     }
                 }
         );
+
+    }
+
+    private boolean isRefresh(){
+        if (timelinePage==1){
+            return true;
+        }
+        return false;
     }
 }

@@ -61,7 +61,12 @@
             android:textColor="@color/material_grey_900"
             android:textSize="@dimen/timeline_content_txt"
             android:text="求关注。。。。。。"/>
-
+    <com.dk.dkweibo.ui.widget.TimelinePicView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/status_pic_view"
+            >
+    </com.dk.dkweibo.ui.widget.TimelinePicView>
     <include layout="@layout/layout_retweet_status"/>
     <LinearLayout
             android:layout_width="match_parent"

@@ -4,10 +4,14 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * Created by feng on 2015/10/11.
  */
 public class StatusImageView extends LinearLayout {
+
+
     public StatusImageView(Context context) {
         super(context);
     }

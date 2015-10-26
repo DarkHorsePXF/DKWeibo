@@ -4,8 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import com.dk.dkweibo.support.utils.LogUtil;
-import com.dk.dkweibo.ui.listener.OnLoadMoreListener;
 
 /**
  * Created by feng on 2015/10/10.
@@ -43,12 +41,14 @@ public class TimelineListView extends RecyclerView {
 
     @Override
     public void onScrolled(int dx, int dy) {
-        int lastPosition=mLayoutManager.findLastCompletelyVisibleItemPosition();
-        if (lastPosition == this.getChildCount()-1) {
+        int lastPosition = mLayoutManager.findLastCompletelyVisibleItemPosition();
+        if (lastPosition == this.getChildCount() - 1) {
             if (!isShowBottom) {
-                isShowBottom=true;
-                if (mOnLoadMoreListener!=null){
+                isShowBottom = true;
+                if (mOnLoadMoreListener != null) {
                     mOnLoadMoreListener.onLoadMore();
+//                    mOnLoadMoreListener.onLoading();
+//                    mOnLoadMoreListener.onLoadComplete();
                 }
             }
         } else {
@@ -56,12 +56,12 @@ public class TimelineListView extends RecyclerView {
         }
 
         int firstPosition = mLayoutManager.findFirstCompletelyVisibleItemPosition();
-        if ( firstPosition== 0) {
+        if (firstPosition == 0) {
             if (!isShowTop) {
-                isShowTop=true;
+                isShowTop = true;
             }
         } else {
-            isShowTop=false;
+            isShowTop = false;
         }
     }
 
@@ -80,8 +80,8 @@ public class TimelineListView extends RecyclerView {
         super.setLayoutManager(layout);
     }
 
-    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener){
-        this.mOnLoadMoreListener=onLoadMoreListener;
+    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
+        this.mOnLoadMoreListener = onLoadMoreListener;
     }
 
     public final boolean isRefreshable() {
@@ -100,11 +100,18 @@ public class TimelineListView extends RecyclerView {
         this.shouldLoadMore = shouldLoadMore;
     }
 
-    public boolean isShowTop(){
+    public boolean isShowTop() {
         return isShowTop;
     }
 
-    public boolean isShowBottom(){
+    public boolean isShowBottom() {
         return isShowBottom;
+    }
+
+    public static interface OnLoadMoreListener {
+
+        void onLoadMore();
+//        void onLoading();
+//        void onLoadComplete();
     }
 }

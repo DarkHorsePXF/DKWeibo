@@ -318,7 +318,7 @@ public class AppActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        GlobalContext.getInstance().getRequeseQueue().cancelAll(TAG);
+        GlobalContext.getInstance().getRequestQueue().cancelAll(TAG);
     }
 
     @Override
