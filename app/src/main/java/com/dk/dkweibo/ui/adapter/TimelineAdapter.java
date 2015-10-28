@@ -40,14 +40,6 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return new StatusHolder(inflater.inflate(R.layout.list_item_timeline, parent, false));
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        Status status=statusList.get(position);
-        if (status.getRetweeted_status()!=null){
-            status=status.getRetweeted_status();
-        }
-        return status.getThumbnail_pic_urls().size();
-    }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
