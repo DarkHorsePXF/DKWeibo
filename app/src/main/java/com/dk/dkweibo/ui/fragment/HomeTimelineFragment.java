@@ -73,14 +73,14 @@ public class HomeTimelineFragment extends BaseTimelineFragment {
         lvTimeline = (TimelineListView) getView().findViewById(R.id.rv_timeline);
         timelineAdapter = new TimelineAdapter(mContext, statusList);
         lvTimeline.setAdapter(timelineAdapter);
-        lvTimeline.setOnLoadMoreListener(new TimelineListView.OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                timelinePage++;
-                //FIXME
+//        lvTimeline.setOnLoadMoreListener(new TimelineListView.OnLoadMoreListener() {
+//            @Override
+//            public void onLoadMore() {
+//                timelinePage++;
+//                //FIXME
 //                requestTimeline();
-            }
-        });
+//            }
+//        });
 
     }
 
@@ -110,7 +110,7 @@ public class HomeTimelineFragment extends BaseTimelineFragment {
                         } finally {
                             timelineAdapter.notifyDataSetChanged();
                             if (isRefresh()) {
-                                HomeTimelineFragment.super.refreshComplete();
+                                refreshComplete();
                             }
                         }
                     }
@@ -119,7 +119,7 @@ public class HomeTimelineFragment extends BaseTimelineFragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         error.printStackTrace();
-                        HomeTimelineFragment.super.refreshComplete();
+                        refreshComplete();
                         ToastUtil.shortToast(GlobalContext.getInstance().getApplicationContext().getString(R.string.network_request_error));
                     }
                 }

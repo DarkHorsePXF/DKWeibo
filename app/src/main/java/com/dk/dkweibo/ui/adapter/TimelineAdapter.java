@@ -50,14 +50,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             statusHolder.avatarView.setImageURI(uri);
             statusHolder.statusTextView.setText(status.getText());
 
-            if (status.getRetweet_count() != 0)
-                statusHolder.tvRetweet.setText(status.getRetweet_count() + "");
+            setAttitudeToViewHolder(status,statusHolder);
 
-            if (status.getComments_count() != 0)
-                statusHolder.tvCommend.setText(status.getComments_count() + "");
-
-            if (status.getAgree_count() != 0)
-                statusHolder.tvAgree.setText(status.getAgree_count() + "");
             statusHolder.tvUsername.setText(status.getUser().getUserName());
 
             if (status.getRetweeted_status() != null) {
@@ -72,10 +66,32 @@ public class TimelineAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             setPicViewUrls(statusHolder.pvStatus, status);
             if (status.getRetweeted_status() != null) {
-                setPicViewUrls(statusHolder.pvRetweet,status.getRetweeted_status());
+                setPicViewUrls(statusHolder.pvRetweet, status.getRetweeted_status());
+                //重置被转发的微博的表态数
+                setAttitudeToViewHolder(status.getRetweeted_status(),statusHolder);
             }
 
 
+        }
+    }
+
+    private void setAttitudeToViewHolder(Status status, StatusHolder statusHolder) {
+        if (status.getRetweet_count() != 0){
+            statusHolder.tvRetweet.setText(status.getRetweet_count() + "");
+        }else {
+            statusHolder.tvRetweet.setText(mContext.getResources().getString(R.string.re_tweet));
+        }
+
+        if (status.getComments_count() != 0){
+            statusHolder.tvCommend.setText(status.getComments_count() + "");
+        }else {
+            statusHolder.tvCommend.setText(mContext.getResources().getString(R.string.comment));
+        }
+
+        if (status.getAgree_count() != 0) {
+            statusHolder.tvAgree.setText(status.getAgree_count() + "");
+        }else {
+            statusHolder.tvAgree.setText(mContext.getResources().getString(R.string.agree));
         }
     }
 
